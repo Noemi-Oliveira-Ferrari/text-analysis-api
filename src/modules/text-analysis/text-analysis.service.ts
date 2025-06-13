@@ -54,19 +54,24 @@ export class TextAnalysisService {
     if (!term || typeof term !== 'string') {
       throw new Error('Invalid term input');
     }
-
-    const result = await TextAnalysisModel.query()
-      .where('text', 'like', `%${term}%`)
+    const latest = await TextAnalysisModel.query()
       .orderBy('createdAt', 'desc')
       .first();
 
-    if (!result) {
+    if (!latest) {
+      throw new NotFoundException('No text records found.');
+    }
+
+    const textLower = latest.text.toLowerCase();
+    const termLower = term.toLowerCase();
+
+    if (!textLower.includes(termLower)) {
       throw new NotFoundException(`No text found containing the term: ${term}`);
     }
 
     return {
       message: `Search results for term: ${term}`,
-      data: { text: result.text },
+      data: { text: latest.text },
     };
   }
 }

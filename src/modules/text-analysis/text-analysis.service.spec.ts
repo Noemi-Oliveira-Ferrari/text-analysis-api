@@ -7,7 +7,6 @@ jest.mock('./text-analysis.model', () => ({
   TextAnalysisModel: {
     query: jest.fn(() => ({
       insert: jest.fn(),
-      where: jest.fn().mockReturnThis(),
       orderBy: jest.fn().mockReturnThis(),
       first: jest.fn(),
     })),
@@ -52,12 +51,10 @@ describe('TextAnalysisService', () => {
         text: 'Some previous text containing intelligence',
       });
 
-      const mockWhere = jest.fn().mockReturnValueOnce({
-        orderBy: jest.fn().mockReturnValueOnce({ first: mockFirst }),
-      });
+      const mockOrderBy = jest.fn().mockReturnValueOnce({ first: mockFirst });
 
       (TextAnalysisModel.query as jest.Mock).mockReturnValueOnce({
-        where: mockWhere,
+        orderBy: mockOrderBy,
       });
 
       const result = await service.searchTerm('intelligence');
@@ -65,6 +62,22 @@ describe('TextAnalysisService', () => {
       expect(result.message).toContain('Search results for term');
       expect(result.data.text).toBe(
         'Some previous text containing intelligence',
+      );
+    });
+
+    it('should throw NotFoundException if no match found', async () => {
+      const mockFirst = jest.fn().mockResolvedValueOnce({
+        text: 'Some previous text containing intelligence',
+      });
+
+      const mockOrderBy = jest.fn().mockReturnValueOnce({ first: mockFirst });
+
+      (TextAnalysisModel.query as jest.Mock).mockReturnValueOnce({
+        orderBy: mockOrderBy,
+      });
+
+      await expect(service.searchTerm('nonexistent')).rejects.toThrow(
+        NotFoundException,
       );
     });
 

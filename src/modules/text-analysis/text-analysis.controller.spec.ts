@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { SearchTermDto, TextRequestDto } from './dtos';
+import { SearchTermQueryDto, TextAnalysisBodyDto } from './dtos';
 import { TextAnalysisController } from './text-analysis.controller';
 import { TextAnalysisService } from './text-analysis.service';
 
@@ -29,7 +29,7 @@ describe('TextAnalysisController', () => {
 
   describe('sendData', () => {
     it('should call analyzeText and return result', async () => {
-      const dto: TextRequestDto = { text: 'some text' };
+      const dto: TextAnalysisBodyDto = { text: 'some text' };
       const serviceResult = {
         totalWords: 5,
         topWords: [],
@@ -45,7 +45,7 @@ describe('TextAnalysisController', () => {
     });
 
     it('should throw error if analyzeText throws', async () => {
-      const dto: TextRequestDto = { text: 'some text' };
+      const dto: TextAnalysisBodyDto = { text: 'some text' };
       jest.spyOn(service, 'analyzeText').mockRejectedValue(new Error('fail'));
 
       await expect(controller.sendData(dto)).rejects.toThrow('fail');
@@ -54,7 +54,7 @@ describe('TextAnalysisController', () => {
 
   describe('searchTerm', () => {
     it('should call searchTerm and return result', async () => {
-      const query: SearchTermDto = { term: 'intelligence' };
+      const query: SearchTermQueryDto = { term: 'intelligence' };
       const serviceResult = { message: 'found', data: { text: 'some text' } };
 
       jest.spyOn(service, 'searchTerm').mockResolvedValue(serviceResult);
@@ -66,7 +66,7 @@ describe('TextAnalysisController', () => {
     });
 
     it('should throw error if searchTerm throws', async () => {
-      const query: SearchTermDto = { term: 'intelligence' };
+      const query: SearchTermQueryDto = { term: 'intelligence' };
       jest.spyOn(service, 'searchTerm').mockRejectedValue(new Error('fail'));
 
       await expect(controller.searchTerm(query)).rejects.toThrow('fail');

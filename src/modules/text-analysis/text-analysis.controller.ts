@@ -1,6 +1,11 @@
 import { Body, Controller, Get, Post, Query } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
-import { SearchTermDto, TextRequestDto } from './dtos';
+import { ApiOkResponse, ApiQuery, ApiTags } from '@nestjs/swagger';
+import {
+  SearchTermQueryDto,
+  SearchTermResponseDto,
+  TextAnalysisBodyDto,
+  TextAnalysisResponseDto,
+} from './dtos';
 import { TextAnalysisService } from './text-analysis.service';
 
 @ApiTags('Text Analysis')
@@ -9,7 +14,14 @@ export class TextAnalysisController {
   constructor(private textAnalysisService: TextAnalysisService) {}
 
   @Get('/search-term')
-  async searchTerm(@Query() query: SearchTermDto) {
+  @ApiQuery({
+    name: 'term',
+    required: true,
+    description: 'Term to search in analyzed texts',
+    type: String,
+  })
+  @ApiOkResponse({ type: SearchTermResponseDto })
+  async searchTerm(@Query() query: SearchTermQueryDto) {
     try {
       const { term } = query;
       const result = await this.textAnalysisService.searchTerm(term);
@@ -19,8 +31,9 @@ export class TextAnalysisController {
     }
   }
 
+  @ApiOkResponse({ type: TextAnalysisResponseDto })
   @Post()
-  async sendData(@Body() data: TextRequestDto) {
+  async sendData(@Body() data: TextAnalysisBodyDto) {
     try {
       const result = await this.textAnalysisService.analyzeText(data.text);
       return result;
