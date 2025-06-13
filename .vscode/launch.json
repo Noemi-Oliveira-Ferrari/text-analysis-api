@@ -1,0 +1,17 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "analyse-text-api",
+      "runtimeExecutable": "tsc-watch",
+      "args": ["-p", "tsconfig.build.json", "--onSuccess", "npm start"],
+      "restart": true,
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "skipFiles": ["<node_internals>/**", "node_modules/**"],
+      "envFile": "${workspaceFolder}/.env"
+    }
+  ]
+}
