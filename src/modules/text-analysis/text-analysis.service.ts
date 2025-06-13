@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { stopwords } from 'src/utils';
+import { stopwords } from '../../utils';
 import { OpenAIService } from '../open-ai/open-ai.service';
 import { SearchTermResponse, TextAnalysisResponse } from './interfaces';
 import { TextAnalysisModel } from './text-analysis.model';

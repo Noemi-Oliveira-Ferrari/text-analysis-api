@@ -15,7 +15,6 @@ export class TextAnalysisController {
       const result = await this.textAnalysisService.searchTerm(term);
       return result;
     } catch (error) {
-      console.error('Error searching term:', error);
       throw error;
     }
   }
@@ -26,7 +25,6 @@ export class TextAnalysisController {
       const result = await this.textAnalysisService.analyzeText(data.text);
       return result;
     } catch (error) {
-      console.error('Error analyzing text:', error);
       throw error;
     }
   }

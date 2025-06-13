@@ -72,3 +72,9 @@ http://localhost:3000/api
 
 Este projeto inclui uma collection do Insomnia com todos os endpoints da API.
 Basta importar o arquivo .json no Insomnia e começar a testar.
+
+---
+
+## 💻 Testes com JEST
+
+Este projeto inclui 100% de cobertura de testes unitários com JEST.
